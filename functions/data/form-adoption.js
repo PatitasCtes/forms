@@ -195,7 +195,8 @@ export const getADOP_FORM = () => {
       {
         "id": 30,
         "pregunta": "Para continuar con el proceso, confirma que aceptas el uso de tus datos personales conforme a lo indicado",
-        "tipo": "aceptacion"
+         "tipo": "opcion_unica",
+        "opciones": ["Si", "No"]
       }
     ]
   }
