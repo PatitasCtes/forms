@@ -2,29 +2,22 @@ import express from "express";
 import cors from "cors";
 import serverless from "serverless-http";
 import {
-    fetchPetsByCriteria,
-    addPet,
-    fetchPetById,
-    fetchPetByUID,
-    updatePetById,
-    deletePetById,
-    addBook
-} from "./controllers/petController.js";
+    fetchForm,
+    fetchFormById,
+    saveForm
+} from "./controllers/formController.js";
 const app = express();
 app.use(cors());
 app.use(express.json());
 const router = express.Router();
 
-// Rutas de mascotas
-// Rutas de mascotas
-router.get("/pets", fetchPetsByCriteria); // Obtener mascotas por criterios
-router.get("/pets/uid/:petUID", fetchPetByUID); // Obtener una mascota por UID
-router.get("/pets/:petId", fetchPetById); // Obtener una mascota por ID
-router.post("/pets", addPet); // Crear una nueva mascota
-router.put("/pets/:petId", updatePetById); // Actualizar una mascota por ID
-router.delete("/pets/:petId", deletePetById); // Eliminar una mascota por ID
-router.post("/pets/:petId/book", addBook);// Ruta para agregar un book a la mascota
-// Registrar las rutas de mascotas
+// Rutas de formularios
+router.get("/form/:formType", fetchForm); // Obtener formulario por tipo
+router.get("/form/id/:formId", fetchFormById); // Obtener formulario por ID
+router.post("/form", saveForm); // Guardar formulario con respuestas
+
+
+// Registrar las rutas de formularios
 app.use('/.netlify/functions/server', router);
 
 export const handler = serverless(app);

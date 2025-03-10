@@ -1,7 +1,7 @@
 {
-  "name": "patitas-pet",
+  "name": "patitas-forms",
   "version": "1.0.0",
-  "description": "Servicio de mascotas.",
+  "description": "Servicio de formularios.",
   "main": "functions/server.js",
   "scripts": {
     "build": "netlify deploy --prod",
