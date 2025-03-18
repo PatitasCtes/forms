@@ -6,6 +6,10 @@ import {
     getDoc,
     getDocs,
     doc,
+    updateDoc,
+    deleteDoc,
+    where,
+    query
 } from "firebase/firestore";
 import { getADOP_FORM } from "../data/form-adoption.js";
 import { getTRANSITO_FORM } from "../data/form-transito.js";
@@ -45,6 +49,41 @@ export const getForm = (type) => {
         throw error;
     }
 };
+
+
+/**
+ * Actualizar un formulario en Firestore.
+ * @param {string} formId ID del formulario a actualizar.
+ * @param {Object} updatedData Datos actualizados del formulario.
+ * @returns {Promise<void>} Promesa que resuelve cuando la actualización se complete.
+ */
+export const updateForm = async (formId, updatedData) => {
+    try {
+        const docRef = doc(db, "forms", formId);
+        await updateDoc(docRef, updatedData);
+        console.log(`Formulario con ID ${formId} actualizado correctamente.`);
+    } catch (error) {
+        console.error(`Error al actualizar el formulario con ID ${formId}:`, error);
+        throw error;
+    }
+};
+
+/**
+ * Eliminar un formulario en Firestore.
+ * @param {string} formId ID del formulario a eliminar.
+ * @returns {Promise<void>} Promesa que resuelve cuando la eliminación se complete.
+ */
+export const deleteForm = async (formId) => {
+    try {
+        const docRef = doc(db, "forms", formId);
+        await deleteDoc(docRef);
+        console.log(`Formulario con ID ${formId} eliminado correctamente.`);
+    } catch (error) {
+        console.error(`Error al eliminar el formulario con ID ${formId}:`, error);
+        throw error;
+    }
+};
+
 
 /**
  * Guardar un formulario con las respuestas en Firestore.
@@ -86,17 +125,37 @@ export const getFormById = async (formId) => {
  * Obtener todos los formularios almacenados en Firestore.
  * @returns {Promise<Array<Object>>} Lista de formularios.
  */
-export const getAllForms = async () => {
+/**
+ * Obtener todos los formularios con filtros opcionales.
+ * @param {Object} filters Filtros opcionales: { status, PetId, score, tipo }.
+ * @returns {Promise<Array<Object>>} Lista de formularios que cumplen con los filtros.
+ */
+export const getAllForms = async (filters = {}) => {
     try {
+        const { status, PetId, score, tipo } = filters;
         const formsCollection = collection(db, "forms");
-        const querySnapshot = await getDocs(formsCollection);
+
+        // Construir la consulta con filtros dinámicos
+        let firestoreQuery = formsCollection;
+
+        const conditions = [];
+        if (status) conditions.push(where("status", "==", status));
+        if (PetId) conditions.push(where("PetId", "==", PetId));
+        if (score) conditions.push(where("score", "==", score));
+        if (tipo) conditions.push(where("tipo", "==", tipo));
+
+        if (conditions.length > 0) {
+            firestoreQuery = query(formsCollection, ...conditions);
+        }
+
+        const querySnapshot = await getDocs(firestoreQuery);
         const forms = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            ...doc.data(),
         }));
         return forms;
     } catch (error) {
-        console.error("Error al obtener todos los formularios:", error);
+        console.error("Error al obtener los formularios con filtros:", error);
         throw error;
     }
 };
