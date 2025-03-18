@@ -4,6 +4,7 @@ import {
     collection,
     addDoc,
     getDoc,
+    getDocs,
     doc,
 } from "firebase/firestore";
 import { getADOP_FORM } from "../data/form-adoption.js";
@@ -81,5 +82,24 @@ export const getFormById = async (formId) => {
     }
 };
 
-export default { getForm, submitForm, getFormById };
+/**
+ * Obtener todos los formularios almacenados en Firestore.
+ * @returns {Promise<Array<Object>>} Lista de formularios.
+ */
+export const getAllForms = async () => {
+    try {
+        const formsCollection = collection(db, "forms");
+        const querySnapshot = await getDocs(formsCollection);
+        const forms = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        return forms;
+    } catch (error) {
+        console.error("Error al obtener todos los formularios:", error);
+        throw error;
+    }
+};
+
+export default { getForm, submitForm, getFormById, getAllForms };
 

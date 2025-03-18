@@ -1,4 +1,4 @@
-import { getForm, submitForm, getFormById } from "../models/formModel.js";
+import { getForm, submitForm, getFormById, getAllForms } from "../models/formModel.js";
 
 export const fetchForm = async (req, res) => {
     const { formType } = req.params;
@@ -52,4 +52,15 @@ export const fetchFormById = async (req, res) => {
     }
 };
 
+export const fetchForms = async (req, res) => {
+   
+    try {
+        const forms = await getAllForms();
+       
+        res.json(forms);
+    } catch (error) {
+        console.error(`Error al obtener formularios:`, error);
+        res.status(500).json({ message: "Error al obtener formularios" });
+    }
+};
 

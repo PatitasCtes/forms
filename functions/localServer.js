@@ -4,7 +4,8 @@ import serverless from "serverless-http";
 import {
   fetchForm,
   fetchFormById,
-  saveForm
+  saveForm,
+  fetchForms
 } from "./controllers/formController.js";
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // Rutas de formularios
 router.get("/form/:formType", fetchForm); // Obtener formulario por tipo
+router.get("/forms", fetchForms); // Obtener formularios
 router.get("/form/id/:formId", fetchFormById); // Obtener formulario por ID
 router.post("/form", saveForm); // Guardar formulario con respuestas
 
