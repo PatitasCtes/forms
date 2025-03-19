@@ -160,5 +160,38 @@ export const getAllForms = async (filters = {}) => {
     }
 };
 
-export default { getForm, submitForm, getFormById, getAllForms };
+export const updateAllForms = async (filters = {}, updatedData) => {
+    try {
+        const forms = await getAllForms(filters);
+        for (const form of forms) {
+            await updateForm(form.id, updatedData);
+        }
+        console.log("Todos los formularios actualizados correctamente.");
+    } catch (error) {
+        console.error("Error al actualizar todos los formularios:", error);
+        throw error;
+    }
+};
+
+export const deleteAllForms = async (filters = {}) => {
+    try {
+        const forms = await getAllForms(filters);
+        for (const form of forms) {
+            await deleteForm(form.id);
+        }
+        console.log("Todos los formularios eliminados correctamente.");
+    } catch (error) {
+        console.error("Error al eliminar todos los formularios:", error);
+        throw error;
+    }
+};
+
+export default {
+    getForm,
+    submitForm,
+    getFormById,
+    getAllForms,
+    updateAllForms,
+    deleteAllForms
+};
 
