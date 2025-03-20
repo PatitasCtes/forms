@@ -92,13 +92,14 @@ export const fetchFormById = async (req, res) => {
 
 export const fetchForms = async (req, res) => {
     try {
-        const { status, PetId, score, tipo } = req.query;
+        const { status, PetId, score, tipo , archivados} = req.query;
 
         const filters = {
             ...(status && { status }),
             ...(PetId && { PetId }),
             ...(score && { score: parseInt(score) }),
             ...(tipo && { tipo }),
+            ...({ archivados }),
         };
 
         const forms = await getAllForms(filters);
@@ -154,11 +155,11 @@ export const updateForms = async (req, res) => {
 
 export const searchFormsController = async (req, res) => {
     try {
-        const { searchString } = req.query;
+        const { searchString, archivados } = req.query;
         if (!searchString) {
             return res.status(400).json({ message: "Search string is required" });
         }
-        const forms = await searchForms(searchString);
+        const forms = await searchForms(searchString,archivados);
         res.json(forms);
     } catch (error) {
         console.error("Error searching forms:", error);

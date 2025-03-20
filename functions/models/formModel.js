@@ -135,7 +135,7 @@ export const getFormById = async (formId) => {
  */
 export const getAllForms = async (filters = {}) => {
     try {
-        const { status, PetId, score, tipo } = filters;
+        const { status, PetId, score, tipo, archivados } = filters;
         const formsCollection = collection(db, "forms");
 
         // Construir la consulta con filtros dinámicos
@@ -146,7 +146,7 @@ export const getAllForms = async (filters = {}) => {
         if (PetId) conditions.push(where("PetId", "==", PetId));
         if (score) conditions.push(where("score", "==", score));
         if (tipo) conditions.push(where("tipo", "==", tipo));
-
+        if (!archivados) conditions.push(where("status", "!=", "Archivado"));
         if (conditions.length > 0) {
             firestoreQuery = query(formsCollection, ...conditions);
         }
@@ -188,13 +188,13 @@ export const deleteAllForms = async (filters = {}) => {
         throw error;
     }
 };
-
 /**
  * Buscar formularios que coincidan con las palabras clave en la cadena de búsqueda.
  * @param {string} searchString Cadena de búsqueda con palabras clave separadas por guiones.
+ * @param {boolean} archivados Indica si se deben incluir formularios archivados.
  * @returns {Promise<Array<Object>>} Lista de formularios que coinciden con las palabras clave.
  */
-export const searchForms = async (searchString) => {
+export const searchForms = async (searchString, archivados) => {
     try {
         const keywords = searchString.split("-").map(keyword => keyword.trim());
         const formsCollection = collection(db, "forms");
@@ -207,8 +207,11 @@ export const searchForms = async (searchString) => {
                 where("id", "==", keyword)
             );
         });
+        let firestoreQuery = query(formsCollection,or(...conditions));
+        if (!archivados) {
+             firestoreQuery = query(formsCollection, and(where("status", "!=", "Archivado"),or(...conditions))); // Usar OR en lugar de AND
+        }
 
-        const firestoreQuery = query(formsCollection, or(...conditions)); // Usar OR en lugar de AND
         const querySnapshot = await getDocs(firestoreQuery);
         let forms = querySnapshot.docs.map(doc => ({
             id: doc.id,
@@ -216,13 +219,13 @@ export const searchForms = async (searchString) => {
         }));
 
         // Filtrar los resultados en el lado del cliente para coincidencias en respuestas
+        const allowedQuestions = [1, 3, 4, 5, 7, 8, 9, 13, 26, 29];
         forms = forms.filter(form => {
-            return keywords.some(keyword => { // Usar SOME en lugar de EVERY
-                return form.respuestas.some(respuesta => {
-                    if (typeof respuesta.respuesta === 'string') {
+            return keywords.some(keyword => {
+                return allowedQuestions.some(questionId => {
+                    const respuesta = form.respuestas.find(respuesta => respuesta.preguntaId === questionId);
+                    if (respuesta && typeof respuesta.respuesta === 'string') {
                         return respuesta.respuesta.toLowerCase().includes(keyword.toLowerCase());
-                    } else if (Array.isArray(respuesta.respuesta)) {
-                        return respuesta.respuesta.some(item => typeof item === 'string' && item.toLowerCase().includes(keyword.toLowerCase()));
                     }
                     return false;
                 });
