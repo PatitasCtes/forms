@@ -1,4 +1,4 @@
-import { getForm, updateForm, deleteForm, submitForm, getFormById, getAllForms, updateAllForms, deleteAllForms } from "../models/formModel.js";
+import { getForm, updateForm, deleteForm, submitForm, getFormById, getAllForms, updateAllForms, deleteAllForms, searchForms  } from "../models/formModel.js";
 
 export const fetchForm = async (req, res) => {
     const { formType } = req.params;
@@ -149,5 +149,19 @@ export const updateForms = async (req, res) => {
     } catch (error) {
         console.error(`Error al actualizar formularios:`, error);
         res.status(500).json({ message: "Error al actualizar formularios" });
+    }
+};
+
+export const searchFormsController = async (req, res) => {
+    try {
+        const { searchString } = req.query;
+        if (!searchString) {
+            return res.status(400).json({ message: "Search string is required" });
+        }
+        const forms = await searchForms(searchString);
+        res.json(forms);
+    } catch (error) {
+        console.error("Error searching forms:", error);
+        res.status(500).json({ message: "Error searching forms" });
     }
 };

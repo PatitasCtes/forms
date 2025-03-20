@@ -25,6 +25,7 @@ router.get("/form/id/:formId", fetchFormById); // Obtener formulario por ID
 router.patch("/form/:formId", updateFormById); // Editar formulario por ID
 router.delete("/form/:formId", deleteFormById); // Eliminar formulario por ID
 router.post("/form", saveForm); // Guardar formulario con respuestas
+router.get("/forms/search", searchFormsController); // Busca coincidencias en formularios 
 
 
 // Registrar las rutas de formularios

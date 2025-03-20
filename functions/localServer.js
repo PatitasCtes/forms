@@ -9,7 +9,8 @@ import {
   saveForm,
   fetchForms,
   updateForms,
-  deleteForms
+  deleteForms,
+  searchFormsController
 } from "./controllers/formController.js";
 
 const app = express();
@@ -27,6 +28,7 @@ router.delete("/forms", deleteForms); // Eliminar formularios
 router.get("/form/id/:formId", fetchFormById); // Obtener formulario por ID
 router.patch("/form/:formId", updateFormById); // Editar formulario por ID
 router.delete("/form/:formId", deleteFormById); // Eliminar formulario por ID
+router.get("/forms/search", searchFormsController); // Busca coincidencias en formularios 
 
 router.post("/form", saveForm); // Guardar formulario con respuestas
 

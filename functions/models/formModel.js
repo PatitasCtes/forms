@@ -9,7 +9,10 @@ import {
     updateDoc,
     deleteDoc,
     where,
-    query
+    query,
+    or,
+    and,
+    documentId
 } from "firebase/firestore";
 import { getADOP_FORM } from "../data/form-adoption.js";
 import { getTRANSITO_FORM } from "../data/form-transito.js";
@@ -186,12 +189,61 @@ export const deleteAllForms = async (filters = {}) => {
     }
 };
 
+/**
+ * Buscar formularios que coincidan con las palabras clave en la cadena de búsqueda.
+ * @param {string} searchString Cadena de búsqueda con palabras clave separadas por guiones.
+ * @returns {Promise<Array<Object>>} Lista de formularios que coinciden con las palabras clave.
+ */
+export const searchForms = async (searchString) => {
+    try {
+        const keywords = searchString.split("-").map(keyword => keyword.trim());
+        const formsCollection = collection(db, "forms");
+
+        // Construir la consulta con condiciones OR para cada palabra clave (sin array-contains)
+        const conditions = keywords.map(keyword => {
+            return or(
+                where("PetName", ">=", keyword),
+                where("PetName", "<=", keyword + "\uf8ff"),
+                where("id", "==", keyword)
+            );
+        });
+
+        const firestoreQuery = query(formsCollection, and(...conditions));
+        const querySnapshot = await getDocs(firestoreQuery);
+        let forms = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+
+        // Filtrar los resultados en el lado del cliente para coincidencias en respuestas
+        forms = forms.filter(form => {
+            return keywords.every(keyword => {
+                return form.respuestas.some(respuesta => {
+                    if (typeof respuesta.respuesta === 'string') {
+                        return respuesta.respuesta.toLowerCase().includes(keyword.toLowerCase());
+                    } else if (Array.isArray(respuesta.respuesta)) {
+                        return respuesta.respuesta.some(item => typeof item === 'string' && item.toLowerCase().includes(keyword.toLowerCase()));
+                    }
+                    return false;
+                });
+            });
+        });
+
+        return forms;
+    } catch (error) {
+        console.error("Error al buscar formularios:", error);
+        throw error;
+    }
+};
+
+
 export default {
     getForm,
     submitForm,
     getFormById,
     getAllForms,
     updateAllForms,
-    deleteAllForms
+    deleteAllForms,
+    searchForms
 };
 
