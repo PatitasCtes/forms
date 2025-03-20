@@ -199,7 +199,7 @@ export const searchForms = async (searchString) => {
         const keywords = searchString.split("-").map(keyword => keyword.trim());
         const formsCollection = collection(db, "forms");
 
-        // Construir la consulta con condiciones OR para cada palabra clave (sin array-contains)
+        // Construir la consulta con condiciones OR para cada palabra clave
         const conditions = keywords.map(keyword => {
             return or(
                 where("PetName", ">=", keyword),
@@ -208,7 +208,7 @@ export const searchForms = async (searchString) => {
             );
         });
 
-        const firestoreQuery = query(formsCollection, and(...conditions));
+        const firestoreQuery = query(formsCollection, or(...conditions)); // Usar OR en lugar de AND
         const querySnapshot = await getDocs(firestoreQuery);
         let forms = querySnapshot.docs.map(doc => ({
             id: doc.id,
@@ -217,7 +217,7 @@ export const searchForms = async (searchString) => {
 
         // Filtrar los resultados en el lado del cliente para coincidencias en respuestas
         forms = forms.filter(form => {
-            return keywords.every(keyword => {
+            return keywords.some(keyword => { // Usar SOME en lugar de EVERY
                 return form.respuestas.some(respuesta => {
                     if (typeof respuesta.respuesta === 'string') {
                         return respuesta.respuesta.toLowerCase().includes(keyword.toLowerCase());
