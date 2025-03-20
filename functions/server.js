@@ -9,8 +9,10 @@ import {
     fetchForms,
     saveForm,
     updateForms,
-    deleteForms
+    deleteForms,
+    searchFormsController, // Asegúrate de importar searchFormsController
 } from "./controllers/formController.js";
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -25,10 +27,25 @@ router.get("/form/id/:formId", fetchFormById); // Obtener formulario por ID
 router.patch("/form/:formId", updateFormById); // Editar formulario por ID
 router.delete("/form/:formId", deleteFormById); // Eliminar formulario por ID
 router.post("/form", saveForm); // Guardar formulario con respuestas
-router.get("/forms/search", searchFormsController); // Busca coincidencias en formularios 
-
+router.get("/forms/search", searchFormsController); // Busca coincidencias en formularios
 
 // Registrar las rutas de formularios
 app.use('/.netlify/functions/server', router);
 
-export const handler = serverless(app);
+// Función de controlador personalizada para configurar CORS
+const handler = serverless(app, {
+    request: function (request, event, context) {
+        request.event = event;
+        request.context = context;
+    },
+    response: function (response, event, context) {
+        response.headers = {
+            ...response.headers, // Mantener los headers existentes
+            "Access-Control-Allow-Origin": "*", //https://patitascallejeras.com.ar  Reemplaza con tu origen permitido
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        };
+    },
+});
+
+export { handler };
