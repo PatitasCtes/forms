@@ -93,13 +93,14 @@ export const fetchFormById = async (req, res) => {
 export const fetchForms = async (req, res) => {
     try {
         const { status, PetId, score, tipo , archivados} = req.query;
-
+        console.log('archivados',archivados);
+        
         const filters = {
             ...(status && { status }),
             ...(PetId && { PetId }),
             ...(score && { score: parseInt(score) }),
             ...(tipo && { tipo }),
-            ...({ archivados }),
+            ...(archivados && { archivados }),
         };
 
         const forms = await getAllForms(filters);

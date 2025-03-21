@@ -146,11 +146,13 @@ export const getAllForms = async (filters = {}) => {
         if (PetId) conditions.push(where("PetId", "==", PetId));
         if (score) conditions.push(where("score", "==", score));
         if (tipo) conditions.push(where("tipo", "==", tipo));
-        if (!archivados) conditions.push(where("status", "!=", "Archivado"));
+        if (archivados) conditions.push(where("status", "!=", "Archivado"))
+     
         if (conditions.length > 0) {
             firestoreQuery = query(formsCollection, ...conditions);
         }
-
+        console.log(conditions);
+        
         const querySnapshot = await getDocs(firestoreQuery);
         const forms = querySnapshot.docs.map(doc => ({
             id: doc.id,
