@@ -142,17 +142,28 @@ export const getAllForms = async (filters = {}) => {
         let firestoreQuery = formsCollection;
 
         const conditions = [];
-        if (status) conditions.push(where("status", "==", status));
-        if (PetId) conditions.push(where("PetId", "==", PetId));
-        if (score) conditions.push(where("score", "==", score));
-        if (tipo) conditions.push(where("tipo", "==", tipo));
-        if (archivados) conditions.push(where("status", "!=", "Archivado"))
-     
+        if (archivados==='true') {
+            console.log('Muestro archivados');
+            
+            if (status) conditions.push(where("status", "==", status));
+            if (PetId) conditions.push(where("PetId", "==", PetId));
+            if (score) conditions.push(where("score", "==", score));
+            if (tipo) conditions.push(where("tipo", "==", tipo));
+        } else {
+            console.log('No muestro archviados');
+            if (status) conditions.push(where("status", "==", status));
+            if (PetId) conditions.push(where("PetId", "==", PetId));
+            if (score) conditions.push(where("score", "==", score));
+            if (tipo) conditions.push(where("tipo", "==", tipo));
+            conditions.push(where("status", "!=", "Archivado"))
+        }
+
+
         if (conditions.length > 0) {
             firestoreQuery = query(formsCollection, ...conditions);
         }
         console.log(conditions);
-        
+
         const querySnapshot = await getDocs(firestoreQuery);
         const forms = querySnapshot.docs.map(doc => ({
             id: doc.id,
@@ -209,9 +220,9 @@ export const searchForms = async (searchString, archivados) => {
                 where("id", "==", keyword)
             );
         });
-        let firestoreQuery = query(formsCollection,or(...conditions));
+        let firestoreQuery = query(formsCollection, or(...conditions));
         if (!archivados) {
-             firestoreQuery = query(formsCollection, and(where("status", "!=", "Archivado"),or(...conditions))); // Usar OR en lugar de AND
+            firestoreQuery = query(formsCollection, and(where("status", "!=", "Archivado"), or(...conditions))); // Usar OR en lugar de AND
         }
 
         const querySnapshot = await getDocs(firestoreQuery);
