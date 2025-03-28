@@ -5,7 +5,7 @@ export const getADOP_FORM = () => {
         "id": 1,
         "pregunta": "Correo electrónico",
         "tipo": "texto",
-        "obligatoria": true
+        "obligatoria": false
       },
       {
         "id": 2,
