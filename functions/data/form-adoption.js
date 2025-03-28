@@ -4,54 +4,64 @@ export const getADOP_FORM = () => {
       {
         "id": 1,
         "pregunta": "Correo electrónico",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": true
       },
       {
         "id": 2,
         "pregunta": "El perro/gato, ¿Es para su familia o para otra persona?",
         "tipo": "opcion_unica",
-        "opciones": ["Para mi familia", "Para mi pareja", "Para un familiar"]
+        "opciones": ["Para mi familia", "Para mi pareja", "Para un familiar"],
+        "obligatoria": true
       },
       {
         "id": 3,
         "pregunta": "Nombre y Apellido",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": true
       },
       {
         "id": 4,
         "pregunta": "DNI",
-        "tipo": "numero"
+        "tipo": "numero",
+        "obligatoria": true
       },
       {
         "id": 5,
         "pregunta": "¿Tiene Instagram o Facebook? ¿Cuál es el link?",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": false
       },
       {
         "id": 6,
         "pregunta": "Edad",
-        "tipo": "numero"
+        "tipo": "numero",
+        "obligatoria": true
       },
       {
         "id": 7,
         "pregunta": "Dirección",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": true
       },
       {
         "id": 8,
         "pregunta": "Número de celular",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": true
       },
       {
         "id": 9,
         "pregunta": "Si sos estudiante, colocar el número de contacto de alguno de tus padres",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": false
       },
       {
         "id": 10,
         "pregunta": "Ocupación",
         "tipo": "opcion_multiple",
-        "opciones": ["Estudiante", "Independiente", "En relación de dependencia"]
+        "opciones": ["Estudiante", "Independiente", "En relación de dependencia"],
+        "obligatoria": true
       },
       {
         "id": 11,
@@ -66,30 +76,35 @@ export const getADOP_FORM = () => {
           "Abuelo/a",
           "Vivo solo",
           "Con mis padres"
-        ]
+        ],
+        "obligatoria": true
       },
       {
         "id": 12,
         "pregunta": "En la vivienda, ¿hay animales?",
         "tipo": "opcion_multiple",
-        "opciones": ["Perros", "Gatos", "No", "Otros"]
+        "opciones": ["Perros", "Gatos", "No", "Otros"],
+        "obligatoria": true
       },
       {
         "id": 13,
         "pregunta": "Otro número de teléfono (Especifique de quién es)",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": false
       },
       {
         "id": 14,
         "pregunta": "Si tiene vivienda, ¿Tiene patio cerrado?",
         "tipo": "opcion_unica",
-        "opciones": ["Sí", "No"]
+        "opciones": ["Sí", "No"],
+        "obligatoria": true
       },
       {
         "id": 15,
         "pregunta": "La vivienda, casa o departamento es",
         "tipo": "opcion_unica",
-        "opciones": ["Alquiler", "Propio", "De parientes"]
+        "opciones": ["Alquiler", "Propio", "De parientes"],
+        "obligatoria": true
       },
       {
         "id": 16,
@@ -102,7 +117,8 @@ export const getADOP_FORM = () => {
           "Dormir en la cama",
           "Llevar al veterinario",
           "Jugar"
-        ]
+        ],
+        "obligatoria": true
       },
       {
         "id": 17,
@@ -114,39 +130,46 @@ export const getADOP_FORM = () => {
           "Adentro, en una cucha",
           "Adentro, donde quiera",
           "En la cama"
-        ]
+        ],
+        "obligatoria": true
       },
       {
         "id": 18,
         "pregunta": "¿Cuántos animales tiene actualmente? Incluye gatos y perros",
-        "tipo": "numero"
+        "tipo": "numero",
+        "obligatoria": true
       },
       {
         "id": 19,
         "pregunta": "Si tiene que viajar, ¿Con quién dejaría al animal?",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": true
       },
       {
         "id": 20,
         "pregunta": "A sus animales, ¿Le coloca algo para evitar garrapatas y pulgas?",
         "tipo": "opcion_unica",
-        "opciones": ["Sí", "No", "No sabía"]
+        "opciones": ["Sí", "No", "No sabía"],
+        "obligatoria": true
       },
       {
         "id": 21,
         "pregunta": "Si su respuesta es Sí, ¿Qué utiliza para control de pulgas y garrapatas?",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": false
       },
       {
         "id": 22,
         "pregunta": "Si tiene animales actualmente, ¿Qué alimento comen?",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": false
       },
       {
         "id": 23,
         "pregunta": "Castración: ¿Está de acuerdo?",
         "tipo": "opcion_unica",
-        "opciones": ["Sí", "No", "Depende del veterinario", "Desconozco"]
+        "opciones": ["Sí", "No", "Depende del veterinario", "Desconozco"],
+        "obligatoria": true
       },
       {
         "id": 24,
@@ -157,7 +180,8 @@ export const getADOP_FORM = () => {
           "Jornada a bajo costo",
           "Donde me sugieran",
           "No castraría"
-        ]
+        ],
+        "obligatoria": true
       },
       {
         "id": 25,
@@ -170,33 +194,39 @@ export const getADOP_FORM = () => {
           "Después del primer celo",
           "Después de tener crías",
           "No lo haría"
-        ]
+        ],
+        "obligatoria": true
       },
       {
         "id": 26,
         "pregunta": "¿A qué se dedica? Trabajo",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": true
       },
       {
         "id": 27,
         "pregunta": "Nombre del lugar donde trabaja/dirección",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": false
       },
       {
         "id": 28,
         "pregunta": "¿Está interesado en algún animal específico? Puede especificar nombre o link de Instagram",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": false
       },
       {
         "id": 29,
         "pregunta": "Observaciones: ¿Por qué te gustaría adoptar y qué condiciones de vida le darías al animal?",
-        "tipo": "texto"
+        "tipo": "texto",
+        "obligatoria": false
       },
       {
         "id": 30,
         "pregunta": "Para continuar con el proceso, confirma que aceptas el uso de tus datos personales conforme a lo indicado",
-         "tipo": "opcion_unica",
-        "opciones": ["Si", "No"]
+        "tipo": "opcion_unica",
+        "opciones": ["Sí", "No"],
+        "obligatoria": true
       }
     ]
   }
